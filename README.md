@@ -14,7 +14,7 @@ uvicorn main:app --reload
 
 ## run on the web
 
-(https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game)[https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game]
+[https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game](https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game)
 
 # deploy
 
