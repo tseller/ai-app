@@ -2,9 +2,9 @@
 
 A chatbot that plays tic tac toe
 
-# deploy
+# run
 
-## deploy locally
+## run locally
 
 ```
 pipenv shell
@@ -12,9 +12,11 @@ cd app
 uvicorn main:app --reload
 ```
 
-Then open a browser to the indicated address.
+## run on the web
 
-## deploy to web
+(https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game)[https://tic-tac-toe-pflchpuy4a-uc.a.run.app/game]
+
+# deploy
 
 To deploy changes, merge a commit to `main`.
 
@@ -25,7 +27,9 @@ git add .
 git commit -m 'YOUR MESSAGE HERE'
 ```
 
-2. Switch to the main branch, make sure it's up to date, merge your dev changes,
+2. Test the changes locally (see above).
+
+3. Switch to the main branch, make sure it's up to date, merge your dev changes,
 and push. 
 
 ```
