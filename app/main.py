@@ -8,7 +8,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get('/')
 @flog
-def play(commands: str):
+def play():
     return {
         'foo': 'bar'
     }
