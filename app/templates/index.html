@@ -1,0 +1,155 @@
+<html>
+  <head>
+    <style>
+      #preProcedureFlowchart svg {
+        max-width: auto; 
+        height: 660px;
+      }
+
+      #btnSubmit {
+        width:120px;
+        height:80px; color:#ffffff;
+        background-color:#1947d1;
+        border:none;
+        border-radius: 10px;
+        font-size:40px;
+        margin: 10px;
+        cursor: pointer;
+      }
+
+
+      #textComments {
+        display: block;
+        padding: 8px;
+        border: none;
+        margin: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        resize: vertical;
+        max-height: 180px;
+        font-size: 30px;
+      }
+
+      #textComments:focus {
+        outline: none;
+      }
+
+      #divSearch {
+        display: flex;
+        border: 2px solid #1947d1;
+        border-radius: 25px;
+        padding: 10px;
+        align-items: end;
+      }
+
+    </style>
+    <script>
+      ENTER_KEY = 13;
+
+      function resizeTextArea() {
+        const textarea = document.getElementById('textComments');
+        const { style, value } = textarea;
+
+        // The 4 corresponds to the 2 2px borders (top and bottom):
+        style.height = style.minHeight = 'auto';
+        style.minHeight = `${ Math.min(textarea.scrollHeight + 4, parseInt(textarea.style.maxHeight)) }px`;
+        style.height = `${ textarea.scrollHeight + 4 }px`;
+      }
+
+      function start_thinking() {
+          const textComments = document.getElementById('textComments');
+          textComments.disabled=true;
+          textComments.style.opacity = .5;
+
+          let btnSubmit = document.getElementById('btnSubmit');
+          btnSubmit.disabled=true;
+          btnSubmit.style.opacity = .5;
+      }
+
+      function stop_thinking() {
+          const textComments = document.getElementById('textComments');
+          textComments.disabled=false;
+          textComments.style.opacity = 1;
+          textComments.value = '';
+
+          const btnSubmit = document.getElementById('btnSubmit');
+          btnSubmit.disabled=false;
+          btnSubmit.style.opacity = 1;
+      }
+
+      function clickHandler(e) {
+        submit();
+      }
+
+      function keypressHandler(e) {
+        if (e.keyCode == ENTER_KEY) {
+          if (!e.shiftKey) {
+            submit();
+          }
+          else {
+            resizeTextArea();
+          }
+        }
+      }
+
+      function submit(e) {
+        const textComments = document.getElementById('textComments');
+        if (textComments.value.trim().length) {
+          start_thinking();
+          // Simple POST request with a JSON body using fetch
+          let requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              comments: textComments.value,
+              procedure: objProcedure
+            })
+          };
+
+          fetch('procedure-generate', requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            objProcedure = data['procedure'];
+            module.drawProcedure(data['mmd']);
+            stop_thinking();
+            textComments.placeholder = 'Tell me what to change...';
+          });
+        }
+      }
+    
+      let objProcedure = null;
+      const module = {};
+    </script>
+
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+
+      mermaid.initialize({
+          startOnLoad: true,
+          securityLevel: 'loose',
+          maxTextSize:250000,
+          maxEdges:2000,
+          useMaxWidth: true
+      });
+
+      const drawProcedure = async function(mmd) {
+        let element = document.getElementById('preProcedure');
+        const { svg } = await mermaid.render('svgProcedure', mmd);
+        element.innerHTML = svg;
+      };
+
+      module.drawProcedure = drawProcedure;
+
+    </script>
+  </head>
+  <body>
+    <div>
+      <pre class="mermaid" id="preProcedure">flowchart</pre>
+    </div>
+    <div id="divSearch">
+      <textarea id="textComments" onkeypress="keypressHandler(event);"
+          placeholder="Describe a procedure, e.g. 'How to make a PB&J sandwich.'"></textarea>
+      <button id='btnSubmit' onclick="clickHandler(event);">&#x23CE;</button>
+    </div>
+  </body>
+</html>
