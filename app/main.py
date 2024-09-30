@@ -28,5 +28,5 @@ def game_route(request: Request):
 
 @app.post('/play')
 @flog
-def play_route(play: Play) -> dict:
-    return make_play(Play)
+def play_route(play: dict) -> dict:
+    return make_play(Play.parse_obj(play))

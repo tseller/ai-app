@@ -1,7 +1,8 @@
 from floggit import flog
+from schemas import Play
 
 @flog
-def main(comments: str):
+def main(play: Play):
     return {
-        'board': comments
+        'board': play.play
     }
