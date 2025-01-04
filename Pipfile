@@ -4,13 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
 floggit = "*"
-jinja2 = "*"
-langchain-openai = "*"
-openai = "*"
 pydantic = "*"
-uvicorn = "*"
+streamlit = "*"
+vertexai = "*"
 
 [dev-packages]
 

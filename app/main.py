@@ -1,32 +1,15 @@
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
 from floggit import flog
-from schemas import Play
-from play import main as make_play
+import streamlit as st
+from gemini import generate_content
 
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
 
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-
-@app.get('/')
 @flog
-def root():
-    return {
-        'service': 'tic-tac-toe'
-    }
+def update_history():
+    st.session_state.chat_history.append(st.session_state.chat_input)
+    gemini_response = generate_content(st.session_state.chat_history)
+    st.session_state.chat_history.append(gemini_response)
 
-
-@app.get('/game')
-@flog
-def game_route(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="game.html",
-        context={}
-    )
-
-
-@app.post('/play')
-@flog
-def play_route(play: dict) -> dict:
-    return make_play(Play.parse_obj(play))
+st.write(st.session_state.chat_history)
+st.chat_input(on_submit=update_history, key='chat_input')
