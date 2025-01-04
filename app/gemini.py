@@ -10,3 +10,4 @@ model = GenerativeModel("gemini-1.5-flash-002")
 def generate_content(prompt):
     response = model.generate_content(prompt)
     return response.text
+
