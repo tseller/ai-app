@@ -8,7 +8,6 @@ floggit = "*"
 pydantic = "*"
 streamlit = "*"
 vertexai = "*"
-uvicorn = "*"
 
 [dev-packages]
 
